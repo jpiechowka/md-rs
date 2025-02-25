@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Set up a Rust toolchain
+      uses: hecrj/setup-rust-action@v2
     - name: Build debug
       run: cargo build --verbose
     - name: Run tests debug
