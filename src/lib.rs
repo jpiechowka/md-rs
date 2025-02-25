@@ -1,4 +1,11 @@
+mod log;
+
+mod obfuscation {
+    pub(crate) mod ipv4;
+}
+
 pub fn add(left: u64, right: u64) -> u64 {
+    log::log_info(&format!("Adding {left} and {right}"));
     left + right
 }
 
