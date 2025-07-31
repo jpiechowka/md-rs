@@ -1,0 +1,22 @@
+[package]
+name = "md-rs-macros"
+version = "0.1.0"
+edition = "2024"
+authors = ["Janusz Piechówka"]
+repository = "https://github.com/jpiechowka/md-rs"
+license = "MIT OR Apache-2.0"
+readme = "../README.md"
+
+[lib]
+proc-macro = true
+
+[profile.release]
+codegen-units = 1
+panic = "abort"
+lto = true
+strip = true
+
+[dependencies]
+quote = "1.0.40"
+sha3 = "0.10.8"
+syn = "2.0.104"

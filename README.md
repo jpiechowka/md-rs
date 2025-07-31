@@ -1,5 +1,7 @@
 # md-rs
 
+Content based on the Maldev Academy course: https://maldevacademy.com
+
 ## License
 
 `md-rs` is free, open source and permissively licensed! Except where noted (below and/or in individual files),

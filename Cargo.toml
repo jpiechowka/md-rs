@@ -8,11 +8,18 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 
 [profile.release]
-opt-level = 3
 codegen-units = 1
 panic = "abort"
 lto = true
 strip = true
 
 [dependencies]
-proptest = "1.6.0"
+md-rs-macros = { path = "macros" }
+windows = { version = "0.61.3", features = [
+    "Win32_System_LibraryLoader",
+    "Win32_Networking_WinSock",
+    "Win32_System_Memory"
+] }
+
+[dev-dependencies]
+proptest = "1.7.0"

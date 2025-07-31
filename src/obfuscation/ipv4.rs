@@ -1,5 +1,8 @@
 use crate::log;
 use std::ffi::CString;
+use windows::Win32::Foundation::{GetLastError, STATUS_SUCCESS};
+use windows::Win32::System::Memory::{GetProcessHeap, HeapAlloc, HEAP_ZERO_MEMORY};
+use windows::Win32::Networking::WinSock::RtlIpv4StringToAddressA;
 
 /// Creates a C-compatible string (CString) containing an IPv4 address from four octets.
 ///
@@ -34,6 +37,31 @@ fn generate_ipv4(a: u8, b: u8, c: u8, d: u8) -> Option<CString> {
     }
 }
 
+pub fn ipv4_deobfuscate(ipv4_arr: &[&str]) -> Option<(Vec<u8>, usize)> {
+    let buffer_size = ipv4_arr.len() * 4;
+
+    unsafe {
+        let process_heap = GetProcessHeap();
+        let buffer = HeapAlloc(process_heap?, HEAP_ZERO_MEMORY, buffer_size);
+
+        if buffer.is_null() {
+            log::log_error(&format!(
+                "HeapAlloc failed with error: {}",
+                GetLastError().0
+            ));
+            return None;
+        }
+        
+        let mut tmp_buffer = buffer as *mut u8;
+        let status = RtlIpv4StringToAddressA();
+        if status != STATUS_SUCCESS {
+            
+        }
+    }   
+
+    Some((Vec::new(), 0))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -60,6 +88,18 @@ mod tests {
             fn test_all_addresses(a in 0u8..=255, b in 0u8..=255, c in 0u8..=255, d in 0u8..=255) {
                 assert_ipv4(a,b,c,d, &format!("{a}.{b}.{c}.{d}"))
             }
+        }
+    }
+    
+    mod ipv4_deobfuscate_tests {
+        use super::*;
+
+        #[test]
+        fn test_deobfuscation() {
+            let ipv4_array = ["192.168.1.1", "127.0.0.1", "10.0.0.1"];
+            let result = ipv4_deobfuscate(&ipv4_array);
+            assert_eq!(result.is_some(), true);
+            assert_eq!(result.unwrap().0, vec![0x00]);
         }
     }
 }
